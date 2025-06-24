@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zenith Rai | CSIT Portfolio</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            primary: '#4f46e5',
+            dark: '#111827',
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+
+  <!-- AOS Animation CSS -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+</head>
+<!-- Glitter Background Canvas -->
+<canvas id="glitterCanvas" class="fixed top-0 left-0 w-full h-full z-[-1]"></canvas>
+
+<script>
+  const canvas = document.getElementById('glitterCanvas');
+  const ctx = canvas.getContext('2d');
+  let width, height;
+  let sparkles = [];
+
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+
+  function createSparkles() {
+    for (let i = 0; i < 100; i++) {
+      sparkles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: Math.random() * 1.5 + 0.5,
+        dx: (Math.random() - 0.5) * 0.5,
+        dy: (Math.random() - 0.5) * 0.5,
+        alpha: Math.random(),
+        da: (Math.random() * 0.01) - 0.005,
+      });
+    }
+  }
+
+  function drawSparkles() {
+    ctx.clearRect(0, 0, width, height);
+    for (let s of sparkles) {
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${s.alpha})`;
+      ctx.fill();
+      s.x += s.dx;
+      s.y += s.dy;
+      s.alpha += s.da;
+      if (s.alpha <= 0 || s.alpha >= 1) s.da = -s.da;
+      if (s.x < 0 || s.x > width || s.y < 0 || s.y > height) {
+        s.x = Math.random() * width;
+        s.y = Math.random() * height;
+      }
+    }
+    requestAnimationFrame(drawSparkles);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  createSparkles();
+  drawSparkles();
+</script>
+
+<body class="bg-dark text-white font-sans">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-dark shadow-md" data-aos="fade-down" data-aos-duration="800">
+    <div class="max-w-6xl mx-auto flex justify-between items-center px-4 py-4">
+      <h1 class="text-xl font-bold text-yellow-400 tracking-wide">Zenith Rai</h1>
+      <nav class="space-x-6">
+        <a href="#about" class="hover:text-primary transition">About</a>
+        <a href="#skills" class="hover:text-primary transition">Skills</a>
+        <a href="#projects" class="hover:text-primary transition">Projects</a>
+        <a href="#contact" class="hover:text-primary transition">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="text-center py-20 px-4" data-aos="fade-up" data-aos-duration="1000">
+    <img src="zen.jpg" alt="Zenith Rai Photo" class="mx-auto w-40 h-40 md:w-56 md:h-56 rounded-full object-cover shadow-lg border-4 border-primary" />
+    <h2 class="text-4xl md:text-6xl font-bold mt-6">Hello, I'm Zenith Rai</h2>
+    <p class="text-xl text-gray-400 mt-2">BSc CSIT Student & Machine Learning Enthusiast</p>
+    <a href="#projects" class="inline-block mt-6 px-6 py-2 bg-primary text-white rounded-xl shadow-lg transition duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.8)]">View My Work</a>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="max-w-4xl mx-auto py-20 px-4" data-aos="fade-right">
+    <h2 class="text-3xl font-bold mb-6 text-primary">About Me</h2>
+    <p class="text-gray-300 leading-relaxed">
+      I'm a passionate CSIT student at Orchid Int'l College with a strong interest in building real-world software projects and diving into machine learning and AI.
+      I love turning ideas into working solutions and constantly learning new technologies.
+    </p>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills" class="max-w-4xl mx-auto py-20 px-4" data-aos="zoom-in-up">
+    <h2 class="text-3xl font-bold mb-6 text-primary text-center">Skills</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div class="bg-gray-800 p-6 rounded-xl shadow hover:scale-105 transition duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.8)]">HTML & CSS</div>
+      <div class="bg-gray-800 p-6 rounded-xl shadow hover:scale-105 transition duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.8)]">JavaScript</div>
+      <div class="bg-gray-800 p-6 rounded-xl shadow hover:scale-105 transition duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.8)]">Python</div>
+      <div class="bg-gray-800 p-6 rounded-xl shadow hover:scale-105 transition duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.8)]">Machine Learning</div>
+      <div class="bg-gray-800 p-6 rounded-xl shadow hover:scale-105 transition duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.8)]">Django</div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects" class="max-w-5xl mx-auto py-20 px-4" data-aos="fade-up">
+    <h2 class="text-3xl font-bold mb-6 text-primary">Projects</h2>
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="bg-gray-800 rounded-xl p-6 shadow hover:shadow-lg transition">
+        <h3 class="text-xl font-semibold mb-2">Portfolio Website</h3>
+        <p class="text-gray-400">A personal responsive portfolio website using HTML, Tailwind, and JavaScript.</p>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-6 shadow hover:shadow-lg transition">
+        <h3 class="text-xl font-semibold mb-2">Air Quality Prediction</h3>
+        <p class="text-gray-400">A machine learning model predicting AQI using Scikit-learn and Python.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="bg-gray-900 py-20 px-4" data-aos="fade-up">
+    <div class="max-w-xl mx-auto text-center">
+      <h2 class="text-3xl font-bold text-primary mb-6">Get in Touch</h2>
+      <p class="text-gray-400 mb-8">Have a question or want to work together? Fill out the form below and I'll get back to you soon.</p>
+
+      <form action="https://formsubmit.co/zenithhot123@gmail.com" method="POST" class="space-y-6 text-left">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://yourwebsite.com/thank-you.html">
+
+        <div>
+          <label for="name" class="block text-sm font-medium mb-1 text-white">Name</label>
+          <input type="text" id="name" name="name" required
+            class="w-full p-3 rounded-lg bg-dark border border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" />
+        </div>
+
+        <div>
+          <label for="email" class="block text-sm font-medium mb-1 text-white">Email</label>
+          <input type="email" id="email" name="email" required
+            class="w-full p-3 rounded-lg bg-dark border border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" />
+        </div>
+
+        <div>
+          <label for="message" class="block text-sm font-medium mb-1 text-white">Message</label>
+          <textarea id="message" name="message" rows="5" required
+            class="w-full p-3 rounded-lg bg-dark border border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
+        </div>
+
+        <button type="submit"
+          class="w-full px-6 py-3 bg-primary text-white rounded-xl shadow-lg transition duration-300 hover:shadow-[0_0_20px_rgba(99,102,241,0.8)]">
+          Send Message
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Social Links -->
+  <div class="mt-10 flex justify-center space-x-6" data-aos="zoom-in">
+    <!-- GitHub and LinkedIn (unchanged) -->
+    <!-- ... -->
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center py-6 bg-dark text-gray-500 text-sm" data-aos="fade-in">
+    © 2025 Zenith Rai. All rights reserved.
+  </footer>
+
+  <!-- AOS Script -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>AOS.init();</script>
+  <!-- Flying Dragon SVG -->
+<div id="dragon" class="fixed top-[20%] left-[-200px] w-[150px] z-[-1] pointer-events-none opacity-70 animate-flyDragon">
+  <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2 32C2 14 20 6 32 6s30 8 30 26-18 26-30 26S2 50 2 32z" fill="#4f46e5"/>
+    <path d="M45 32c0 7-6 12-13 12s-13-5-13-12 6-12 13-12 13 5 13 12z" fill="#fff"/>
+    <path d="M50 20c-2-6-9-9-15-7s-9 9-7 15 9 9 15 7 9-9 7-15z" fill="yellow"/>
+  </svg>
+</div>
+
+<!-- Dragon Fly Animation -->
+<style>
+  @keyframes flyDragon {
+    0% {
+      transform: translateX(-200px) translateY(0);
+    }
+    50% {
+      transform: translateX(100vw) translateY(-20px);
+    }
+    100% {
+      transform: translateX(-200px) translateY(0);
+    }
+  }
+  .animate-flyDragon {
+    animation: flyDragon 30s linear infinite;
+  }
+</style>
+
+</body>
+</html>
