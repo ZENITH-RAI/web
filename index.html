@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -36,7 +36,7 @@
             overflow: hidden;
             pointer-events: none; /* Allow clicks to pass through to elements below */
         }
-        .video-container iframe {
+         .video-container iframe {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -65,13 +65,15 @@
 <body class="bg-gray-900 text-white">
 
     <div class="video-container">
-        <iframe
-            src="https://youtu.be/8iegO1OVGOk?si=3SbCGLJf2LoN9p5A"
-            frameborder="0"
-            allow="autoplay; encrypted-media"
-            allowfullscreen
-            id="youtube-video"
-        ></iframe>
+       <iframe
+    src="https://www.youtube.com/embed/8iegO1OVGOk?autoplay=1&mute=1&loop=1&playlist=8iegO1OVGOk&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1?autoplay=1&mute=1&loop=1&playlist=VIDEO_ID&controls=0&modestbranding=1
+"
+    frameborder="0"
+    allow="autoplay; encrypted-media"
+    allowfullscreen
+    id="youtube-video"
+></iframe>
+
     </div>
 
     <div class="content-overlay min-h-screen flex flex-col">
@@ -260,11 +262,11 @@
                 const recipientEmail = 'zenithhot123@gmail.com'; // Your email address
 
                 // Encode the subject and body for the mailto link
-                const subject = encodeURIComponent(`Message from your portfolio by ${name}`);
-                const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
+                const subject = encodeURIComponent(Message from your portfolio by ${name});
+                const body = encodeURIComponent(Name: ${name}\nEmail: ${email}\n\nMessage:\n${message});
 
                 // Construct the mailto URL
-                const mailtoLink = `mailto:${recipientEmail}?subject=${subject}&body=${body}`;
+                const mailtoLink = mailto:${recipientEmail}?subject=${subject}&body=${body};
 
                 // Attempt to open the user's email client
                 window.open(mailtoLink, '_blank');
@@ -282,43 +284,6 @@
                 }, 5000); // Hide message after 5 seconds
             });
 
-
-            // YouTube Player API
-            // This function loads the IFrame Player API code asynchronously.
-            var tag = document.createElement('script');
-            tag.src = "https://www.youtube.com/iframe_api"; // Correct YouTube IFrame API URL
-            var firstScriptTag = document.getElementsByTagName('script')[0];
-            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-            var player;
-            // This function creates an <iframe> (and YouTube player)
-            // after the API code downloads.
-            function onYouTubeIframeAPIReady() {
-                player = new YT.Player('youtube-video', {
-                    events: {
-                        'onReady': onPlayerReady,
-                        'onStateChange': onPlayerStateChange
-                    }
-                });
-            }
-
-            // The API will call this function when the video player is ready.
-            function onPlayerReady(event) {
-                event.target.mute(); // Ensure the video is muted
-                event.target.playVideo(); // Start playing the video
-            }
-
-            // The API calls this function when the player's state changes.
-            // This function is used to loop the video.
-            function onPlayerStateChange(event) {
-                if (event.data === YT.PlayerState.ENDED) {
-                    player.seekTo(0); // Go to the beginning of the video
-                    player.playVideo(); // Play it again
-                }
-            }
-
-            // Expose onYouTubeIframeAPIReady to the global scope
-            window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
         });
     </script>
 </body>
