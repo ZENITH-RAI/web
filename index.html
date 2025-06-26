@@ -3,322 +3,487 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZEN'S Portfolio</title>
+    <title>Zenith Rai's Portfolio - Level Up!</title>
+    
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Fonts for pixel-style font -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <!-- Optional: Link to your custom favicon (e.g., a small Mario coin) -->
+    <!-- <link rel="icon" href="assets/images/coin.png" type="image/png"> -->
+
     <style>
-        /* Custom styles for the video background and text overlay */
+        /* Configure Tailwind to use our custom font and extend colors/animations */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        html {
+            scroll-behavior: smooth; /* Smooth scrolling for internal links */
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden; /* Prevent horizontal scroll */
-            /* Apply glowing border to the entire body */
-            animation: glowing-border 3s infinite alternate ease-in-out;
-            border: 2px solid transparent; /* Ensure a base border for the shadow to emanate from */
-        }
-        /* The video-background class is kept for semantic clarity but main styling is on iframe */
-        #video-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-            /* Filter applied directly to the iframe for consistency */
-        }
-        .content-overlay {
-            position: relative;
-            z-index: 1;
-        }
-        /* Ensure iframe covers the entire screen for the background */
-        .video-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            pointer-events: none; /* Allow clicks to pass through to elements below */
-        }
-        .video-container iframe {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100vw; /* Use viewport width */
-            height: 100vh; /* Use viewport height */
-            min-width: 100%;
-            min-height: 100%;
-            transform: translate(-50%, -50%);
-            /* Ensure the video scales correctly without black bars */
-            filter: brightness(0.5); /* Darken the video for better text readability */
+            font-family: 'Press Start 2P', monospace; /* Default pixel font */
+            background-color: #6b8cff; /* Mario sky blue */
+            overflow-x: hidden; /* Prevent horizontal scroll from elements moving out of bounds */
+            /* Optional custom cursor, replace with your image path */
+            /* cursor: url('assets/images/mario-hand-cursor.png'), auto; */
         }
 
-        /* Adjust iframe scaling for smaller screens to ensure full coverage */
-        @media (min-aspect-ratio: 16/9) {
-            .video-container iframe {
-                height: 56.25vw; /* 100vw / (16/9) */
-            }
-        }
-        @media (max-aspect-ratio: 16/9) {
-            .video-container iframe {
-                width: 177.78vh; /* 100vh * (16/9) */
-            }
+        /* Custom styles for specific Mario elements not easily done with Tailwind utilities */
+        .pixel-shadow {
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.7); /* For pixelated text effect */
         }
 
-        /* Keyframes for the continuous glowing border effect */
-        @keyframes glowing-border {
-            0% {
-                box-shadow: 0 0 15px rgba(128, 0, 128, 0.7); /* Purple */
-            }
-            50% {
-                box-shadow: 0 0 25px rgba(255, 255, 0, 1); /* Yellow */
-            }
-            100% {
-                box-shadow: 0 0 15px rgba(128, 0, 128, 0.7); /* Purple */
-            }
+        .mario-block {
+            image-rendering: pixelated; /* Ensures pixel art doesn't blur on scaling */
+            background-size: cover;
+            background-repeat: no-repeat;
         }
 
-        /* Apply the glowing effect to the form */
-        .glowing-form-border {
-            animation: glowing-border 3s infinite alternate ease-in-out; /* 3s duration, infinite loop, alternate direction, smooth transition */
-            border: 2px solid transparent; /* Ensure a base border for the shadow to emanate from */
+        /* Custom Scrollbar Styling for a retro feel */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #4a75f2; /* Darker blue */
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #ffd700; /* Gold coin */
+            border-radius: 6px;
+            border: 3px solid #7f5a4a; /* Brown border */
         }
 
-        /* Apply the glowing effect to all buttons and button-like links */
-        .glowing-button-border {
-            animation: glowing-border 3s infinite alternate ease-in-out;
-            border: 2px solid transparent;
+        /* Custom Keyframes (Tailwind's JIT mode might handle these if configured, but for CDN, direct CSS is often easier) */
+        @keyframes bounceUp {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
+
+        @keyframes coinSpin {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        @keyframes questionBounce {
+            0%, 100% { transform: translateY(0); }
+            25% { transform: translateY(-5px); }
+            50% { transform: translateY(0); }
+            75% { transform: translateY(5px); }
+        }
+
+        @keyframes pipeSlideIn {
+            0% { transform: translateY(100%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Apply custom animations with Tailwind's arbitrary values or just directly if needed */
+        .animate-bounce-up { animation: bounceUp 0.5s ease-in-out infinite; }
+        .animate-coin-spin { animation: coinSpin 1s linear infinite; }
+        .animate-question-bounce { animation: questionBounce 1s ease-in-out infinite; }
+        .animate-pipe-slide-in { animation: pipeSlideIn 0.8s ease-out forwards; }
+
+        /* Tailwind configuration for custom colors and fonts accessible directly in utilities */
+        :root {
+            --color-mario-blue: #4a75f2;
+            --color-mario-red: #eb4b4b;
+            --color-mario-green: #51b94d;
+            --color-mario-gold: #ffd700;
+            --color-mario-brown: #7f5a4a;
+            --color-mario-sky: #6b8cff;
+        }
+        /* Tailwind JIT (via CDN) automatically picks up colors defined in config. But for custom named colors used directly in CSS, defining CSS variables can be helpful if you want to use them outside of Tailwind utility classes. */
+        .bg-mario-blue { background-color: var(--color-mario-blue); }
+        .bg-mario-red { background-color: var(--color-mario-red); }
+        .bg-mario-green { background-color: var(--color-mario-green); }
+        .bg-mario-gold { background-color: var(--color-mario-gold); }
+        .bg-mario-brown { background-color: var(--color-mario-brown); }
+        .bg-mario-sky { background-color: var(--color-mario-sky); }
+
+        .text-mario-blue { color: var(--color-mario-blue); }
+        .text-mario-red { color: var(--color-mario-red); }
+        .text-mario-green { color: var(--color-mario-green); }
+        .text-mario-gold { color: var(--color-mario-gold); }
+        .text-mario-brown { color: var(--color-mario-brown); }
+        .text-mario-sky { color: var(--color-mario-sky); }
+
     </style>
 </head>
-<body class="bg-gray-900 text-white">
+<body class="relative min-h-screen">
 
-    <div class="video-container">
-       <iframe
-    src="https://www.youtube.com/embed/8iegO1OVGOk?autoplay=1&mute=1&loop=1&playlist=8iegO1OVGOk&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1"
-    frameborder="0"
-    allow="autoplay; encrypted-media"
-    allowfullscreen
-    id="youtube-video"
-></iframe>
+    <!-- Global Sound Player (optional, for background music) -->
+    <audio id="bgMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio> <!-- Replace with your Mario BGM -->
+    <button id="musicToggle" class="fixed top-4 left-4 p-2 bg-mario-green text-white rounded-full z-50 text-xs shadow-lg border-2 border-green-800 hover:scale-110 transition-transform">🎵</button>
 
-    </div>
-
-    <div class="content-overlay min-h-screen flex flex-col">
-
-        <nav class="p-6 md:p-8 flex justify-between items-center bg-transparent z-10">
-            <div class="text-3xl font-bold text-teal-400">ZenithRai</div>
-            <div class="hidden md:flex space-x-6">
-                <a href="#home" class="text-gray-200 hover:text-teal-400 transition duration-300 ease-in-out font-medium rounded-md px-3 py-2 glowing-button-border">Home</a>
-                <a href="#about" class="text-gray-200 hover:text-teal-400 transition duration-300 ease-in-out font-medium rounded-md px-3 py-2 glowing-button-border">About</a>
-                <a href="#skills" class="text-gray-200 hover:text-teal-400 transition duration-300 ease-in-out font-medium rounded-md px-3 py-2 glowing-button-border">Skills</a>
-                <a href="#contact" class="text-gray-200 hover:text-teal-400 transition duration-300 ease-in-out font-medium px-3 py-2 glowing-button-border">Contact</a>
+    <!-- Super Mario World-style Header/Navigation -->
+    <header class="w-full bg-mario-red text-white py-4 shadow-lg sticky top-0 z-40 border-b-4 border-mario-brown">
+        <nav class="container mx-auto flex justify-between items-center px-4">
+            <a href="#home" class="text-2xl md:text-3xl font-bold text-mario-gold pixel-shadow hover:scale-105 transition-transform duration-200">ZENITH RAI</a>
+            <div class="space-x-4 md:space-x-8">
+                <a href="#about" class="mario-nav-item text-white hover:text-mario-gold transition-colors duration-200 text-lg md:text-xl font-bold pixel-shadow" data-sound="coin">ABOUT</a>
+                <a href="#projects" class="mario-nav-item text-white hover:text-mario-gold transition-colors duration-200 text-lg md:text-xl font-bold pixel-shadow" data-sound="coin">PROJECTS</a>
+                <a href="#contact" class="mario-nav-item text-white hover:text-mario-gold transition-colors duration-200 text-lg md:text-xl font-bold pixel-shadow" data-sound="coin">CONTACT</a>
+                <a href="https://example.com/your_resume.pdf" target="_blank" class="mario-nav-item text-white hover:text-mario-gold transition-colors duration-200 text-lg md:text-xl font-bold pixel-shadow" data-sound="powerup">RESUME</a>
             </div>
-            <button id="mobile-menu-button" class="md:hidden text-gray-200 focus:outline-none glowing-button-border">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </button>
         </nav>
+    </header>
 
-        <div id="mobile-menu" class="hidden md:hidden bg-gray-800 bg-opacity-90 p-4 text-center space-y-4 rounded-b-lg shadow-lg">
-            <a href="#home" class="block text-gray-200 hover:text-teal-400 transition duration-300 ease-in-out font-medium text-lg py-2 rounded-md glowing-button-border">Home</a>
-            <a href="#about" class="block text-gray-200 hover:text-teal-400 transition duration-300 ease-in-out font-medium text-lg py-2 rounded-md glowing-button-border">About</a>
-            <a href="#skills" class="block text-gray-200 hover:text-teal-400 transition duration-300 ease-in-out font-medium text-lg py-2 rounded-md glowing-button-border">Skills</a>
-            <a href="#contact" class="block text-gray-200 hover:text-teal-400 transition duration-300 ease-in-out font-medium text-lg py-2 rounded-md glowing-button-border">Contact</a>
-        </div>
+    <!-- Main Content Area - Your "Levels" -->
+    <main class="relative z-10 p-4">
 
+        <!-- Section: Home (World 1-1) -->
+        <section id="home" class="min-h-[calc(100vh-80px)] flex items-center justify-center relative overflow-hidden bg-mario-sky pt-20 pb-40 md:pt-0 md:pb-0">
+            <!-- Ground -->
+            <div class="absolute bottom-0 left-0 w-full h-24 md:h-32 bg-gradient-to-t from-green-700 to-green-500 border-t-8 border-green-800"></div>
+            <!-- Clouds - Use actual pixel art cloud images here -->
+            <img src="https://placehold.co/100x60/ffffff/000000?text=CLOUD" alt="Cloud" class="absolute top-1/4 left-10 w-24 h-auto shadow-md mario-block animate-[bounceUp_2s_ease-in-out_infinite]" style="animation-delay: 0.5s;">
+            <img src="https://placehold.co/120x70/ffffff/000000?text=CLOUD" alt="Cloud" class="absolute top-1/3 right-20 w-32 h-auto shadow-md mario-block animate-[bounceUp_2s_ease-in-out_infinite]" style="animation-delay: 1.2s;">
+            
+            <!-- Your Character - Replace with your Mario avatar GIF/PNG -->
+            <img id="marioChar" src="https://placehold.co/150x180/000000/ffffff?text=MARIO+AVATAR" alt="Your Mario Avatar" class="w-36 h-auto md:w-48 animate-bounce-up z-20" style="image-rendering: pixelated; transition: transform 0.2s ease-out;">
 
-        <section id="home" class="flex-grow flex items-center justify-center text-center p-6 md:p-12 relative z-10 min-h-[calc(100vh-8rem)]">
-            <div class="bg-gray-900 bg-opacity-70 rounded-2xl p-8 md:p-12 shadow-2xl backdrop-blur-sm transform hover:scale-105 transition duration-500 ease-in-out max-w-4xl w-full flex flex-col items-center">
-                <!--
-                    To display your 'zen.jpg' image, please upload it to a public hosting service
-                    (e.g., Imgur, GitHub Pages, your own web server) and replace the 'src' attribute
-                    below with the public URL to your image.
-                -->
-                <img src="zen.jpg" alt="Zenith Rai" class="rounded-full w-32 h-32 mb-4 shadow-md object-cover" onerror="this.onerror=null;this.src='https://placehold.co/128x128/6B46C1/FFFFFF?text=ZR';">
-                <h1 class="text-5xl md:text-7xl font-extrabold mb-4 text-white drop-shadow-lg leading-tight">
-                    Hello, I'm <span class="text-teal-400 animate-pulse">Zenith Rai</span>
-                </h1>
-                <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto drop-shadow-md">
-                    A passionate developer specializing in Machine Learning, Web Development, and more.
-                </p>
-                <a href="#skills" class="inline-block bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-4 focus:ring-teal-500 focus:ring-opacity-50 glowing-button-border">
-                    Explore My Skills
-                </a>
-            </div>
-        </section>
-
-        <section id="about" class="py-20 md:py-32 px-6 md:px-12 bg-gray-900 bg-opacity-90 relative z-10 rounded-t-3xl shadow-inner-xl">
-            <div class="container mx-auto max-w-4xl text-center">
-                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-teal-400">About Me</h2>
-                <p class="text-lg md:text-xl text-gray-300 leading-relaxed mb-6">
-                    I am a dedicated and innovative developer with a strong foundation in various programming languages and frameworks. My journey in technology is driven by a desire to build impactful solutions and continuously learn new technologies. I thrive on challenges and enjoy turning complex problems into elegant, efficient, and user-friendly applications.
-                </p>
-                <p class="text-lg md:text-xl text-gray-300 leading-relaxed">
-                    From crafting responsive web interfaces to developing intelligent machine learning models, I am passionate about every step of the development process. Let's connect and build something amazing together!
-                </p>
-            </div>
-        </section>
-
-        <section id="skills" class="py-20 md:py-32 px-6 md:px-12 bg-gray-800 bg-opacity-90 relative z-10 shadow-inner-xl">
-            <div class="container mx-auto max-w-6xl text-center">
-                <h2 class="text-4xl md:text-5xl font-bold mb-12 text-teal-400">My Expertise</h2>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="bg-gray-700 bg-opacity-70 rounded-xl p-8 shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border border-teal-600">
-                        <h3 class="text-3xl font-semibold mb-4 text-white">Machine Learning</h3>
-                        <p class="text-gray-300 text-lg">
-                            Proficient in developing and deploying ML models for various applications, including data analysis, predictive modeling, and AI solutions.
-                        </p>
-                        <p class="text-teal-300 text-sm mt-4 font-mono">TensorFlow, PyTorch, Scikit-learn</p>
-                    </div>
-
-                    <div class="bg-gray-700 bg-opacity-70 rounded-xl p-8 shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border border-teal-600">
-                        <h3 class="text-3xl font-semibold mb-4 text-white">Django</h3>
-                        <p class="text-gray-300 text-lg">
-                            Experienced in building robust and scalable web applications using the Django framework, focusing on backend logic and database management.
-                        </p>
-                        <p class="text-teal-300 text-sm mt-4 font-mono">Python, REST APIs, ORM</p>
-                    </div>
-
-                    <div class="bg-gray-700 bg-opacity-70 rounded-xl p-8 shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border border-teal-600">
-                        <h3 class="text-3xl font-semibold mb-4 text-white">HTML & CSS</h3>
-                        <p class="text-gray-300 text-lg">
-                            Expert in crafting semantically correct HTML structures and styling them with modern CSS, including responsive design and animation.
-                        </p>
-                        <p class="text-teal-300 text-sm mt-4 font-mono">Tailwind CSS, Bootstrap, Responsive Design</p>
-                    </div>
-
-                    <div class="bg-gray-700 bg-opacity-70 rounded-xl p-8 shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border border-teal-600">
-                        <h3 class="text-3xl font-semibold mb-4 text-white">JavaScript</h3>
-                        <p class="text-gray-300 text-lg">
-                            Proficient in interactive web development using vanilla JavaScript and modern frameworks.
-                        </p>
-                        <p class="text-teal-300 text-sm mt-4 font-mono">React, Node.js, DOM Manipulation</p>
-                    </div>
-
-                    <div class="bg-gray-700 bg-opacity-70 rounded-xl p-8 shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border border-teal-600">
-                        <h3 class="text-3xl font-semibold mb-4 text-white">Python</h3>
-                        <p class="text-gray-300 text-lg">
-                            Strong command of Python for scripting, data analysis, web development, and automation.
-                        </p>
-                        <p class="text-teal-300 text-sm mt-4 font-mono">Data Science, Web Scraping, Automation</p>
-                    </div>
-
-                    <div class="bg-gray-700 bg-opacity-70 rounded-xl p-8 shadow-xl transform hover:scale-105 transition duration-300 ease-in-out border border-teal-600">
-                        <h3 class="text-3xl font-semibold mb-4 text-white">C & C++</h3>
-                        <p class="text-gray-300 text-lg">
-                            Solid understanding of low-level programming and system-level development with C and C++.
-                        </p>
-                        <p class="text-teal-300 text-sm mt-4 font-mono">Algorithms, Data Structures, System Programming</p>
-                    </div>
+            <div class="text-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 bg-black bg-opacity-70 p-6 md:p-8 rounded-lg border-4 border-white shadow-xl">
+                <h1 class="text-mario-gold text-4xl md:text-6xl mb-4 pixel-shadow">IT'S ME, ZENITH RAI!</h1>
+                <p class="text-white text-lg md:text-xl pixel-shadow">A <span class="text-mario-green">COMPUTER ENGINEER</span> and <span class="text-mario-red">SOFTWARE DEVELOPER</span></p>
+                <div class="mt-8 flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-8">
+                  <!-- Navigation blocks/pipes -->
+                  <div class="question-block w-24 h-24 bg-yellow-500 border-4 border-yellow-700 relative cursor-pointer flex flex-col items-center justify-center animate-question-bounce shadow-lg rounded-lg transform transition-transform hover:scale-105" data-target="about">
+                    <img src="https://placehold.co/40x40/000000/ffffff?text=?" alt="?" class="w-10 h-10 mario-block animate-[bounceUp_0.8s_ease-in-out_infinite]">
+                    <span class="absolute -bottom-6 text-sm text-white pixel-shadow">About Me</span>
+                  </div>
+                  <div class="pipe w-28 h-36 bg-green-700 border-4 border-green-900 relative cursor-pointer flex items-end justify-center overflow-hidden shadow-lg rounded-lg transform transition-transform hover:scale-105" data-target="projects">
+                    <img src="https://placehold.co/110x140/007f00/ffffff?text=PIPE" alt="Pipe" class="absolute top-0 left-0 w-full h-full object-cover">
+                    <span class="relative z-10 mb-2 text-sm text-white pixel-shadow">Projects</span>
+                  </div>
                 </div>
             </div>
         </section>
 
-        <section id="contact" class="py-20 md:py-32 px-6 md:px-12 bg-gray-900 bg-opacity-90 relative z-10 rounded-b-3xl shadow-inner-xl">
-            <div class="container mx-auto max-w-2xl text-center">
-                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-teal-400">Get In Touch</h2>
-                <p class="text-lg md:text-xl text-gray-300 leading-relaxed mb-8">
-                    Have a project in mind or just want to say hello? Feel free to reach out!
-                </p>
-                <!-- Added glowing-form-border class to the form -->
-                <form id="contact-form" class="space-y-6 p-8 rounded-2xl bg-gray-800 bg-opacity-70 glowing-form-border">
-                    <div>
-                        <input type="text" name="name" placeholder="Your Name" class="w-full p-4 rounded-lg bg-gray-700 text-white border border-gray-600 focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition duration-300 ease-in-out shadow-md" required />
+        <!-- Section: About Me (Toad's House / Info Block) -->
+        <section id="about" class="py-16 md:py-24 relative bg-mario-brown text-white border-t-8 border-b-8 border-mario-gold shadow-inner mt-8 md:mt-16">
+            <div class="container mx-auto px-4 relative z-10">
+                <h2 class="text-5xl md:text-6xl font-bold text-center mb-12 text-mario-gold pixel-shadow">WHO AM I?</h2>
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="bg-black bg-opacity-60 p-8 rounded-lg border-4 border-white shadow-xl">
+                        <p class="text-lg leading-relaxed mb-6 pixel-shadow">Hey there, Superstar! I'm Zenith Rai, a passionate Computer Engineer currently interning at F1Soft International. Just like Mario explores new worlds, I love diving into new technologies and solving complex problems with creative solutions.</p>
+                        <p class="text-lg leading-relaxed mb-6 pixel-shadow">My journey began when I first stumbled upon the world of programming. Since then, I've been collecting "coins" of knowledge in <span class="text-mario-green font-bold">Python</span>, <span class="text-mario-red font-bold">Web Development</span>, and <span class="text-mario-blue font-bold">Machine Learning</span>.</p>
+                        <p class="text-lg leading-relaxed pixel-shadow">Ready to jump into my projects?</p>
                     </div>
-                    <div>
-                        <input type="email" name="email" placeholder="Your Email" class="w-full p-4 rounded-lg bg-gray-700 text-white border border-gray-600 focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition duration-300 ease-in-out shadow-md" required />
+                    <div class="relative w-full h-64 md:h-96 flex items-center justify-center">
+                        <!-- Skill Bubbles/Power-ups - Replace with actual power-up sprites -->
+                        <div class="absolute w-24 h-24 bg-mario-red rounded-full flex items-center justify-center text-center text-sm font-bold shadow-lg animate-bounce-up border-4 border-red-800" style="top: 10%; left: 10%;">
+                          <img src="https://placehold.co/60x60/ff0000/ffffff?text=PYTHON" alt="Python Skill" class="w-16 h-16 mario-block">
+                          <span class="absolute top-full mt-2 text-white pixel-shadow">Python</span>
+                        </div>
+                        <div class="absolute w-24 h-24 bg-mario-green rounded-full flex items-center justify-center text-center text-sm font-bold shadow-lg animate-bounce-up border-4 border-green-800" style="bottom: 15%; right: 5%; animation-delay: 0.2s;">
+                          <img src="https://placehold.co/60x60/00ff00/ffffff?text=WEB" alt="Web Development Skill" class="w-16 h-16 mario-block">
+                          <span class="absolute top-full mt-2 text-white pixel-shadow">Web Dev</span>
+                        </div>
+                        <div class="absolute w-24 h-24 bg-mario-gold rounded-full flex items-center justify-center text-center text-sm font-bold shadow-lg animate-bounce-up border-4 border-yellow-700" style="top: 25%; right: 30%; animation-delay: 0.4s;">
+                          <img src="https://placehold.co/60x60/ffd700/000000?text=ML" alt="Machine Learning Skill" class="w-16 h-16 mario-block">
+                          <span class="absolute top-full mt-2 text-white pixel-shadow">Machine Learning</span>
+                        </div>
                     </div>
-                    <div>
-                        <textarea name="message" placeholder="Your Message" rows="6" class="w-full p-4 rounded-lg bg-gray-700 text-white border border-gray-600 focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition duration-300 ease-in-out shadow-md" required></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-4 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-teal-500 focus:ring-opacity-50 glowing-button-border">
-                        Send Message
-                    </button>
-                </form>
-                <div id="form-message" class="mt-4 p-3 rounded-lg text-white hidden"></div>
+                </div>
             </div>
+            <!-- Ground base -->
+            <div class="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-gray-700 to-gray-500 border-t-8 border-gray-800"></div>
         </section>
 
-        <footer class="py-10 px-6 md:px-12 bg-gray-900 bg-opacity-90 text-center text-gray-400 text-sm relative z-10 rounded-t-lg">
-            <p>© 2024 Zenith. All rights reserved.</p>
-            <div class="flex justify-center space-x-4 mt-4">
-                <a href="https://www.linkedin.com/in/zenith-rai-a56185323/" class="text-gray-400 hover:text-teal-400 transition duration-300 ease-in-out glowing-button-border" aria-label="LinkedIn profile" target="_blank" rel="noopener noreferrer">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2zM4 6a2 2 0 110-4 2 2 0 010 4z" />
-                    </svg>
-                </a>
-                <a href="https://github.com/ZENITH-RAI" class="text-gray-400 hover:text-teal-400 transition duration-300 ease-in-out glowing-button-border" aria-label="GitHub profile" target="_blank" rel="noopener noreferrer">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.47.087.68-0.207.68-0.466 0-0.233-0.009-0.858-0.015-1.673-2.782.602-3.369-1.34-3.369-1.34-0.454-1.156-1.11-1.464-1.11-1.464-0.908-0.618.069-0.606.069-0.606 1.002 0.07 1.529 1.027 1.529 1.027 0.89 1.524 2.336 1.085 2.903 0.829.091-0.645.352-1.085.641-1.336-2.22-.253-4.555-1.113-4.555-4.954 0-1.091.39-1.984 1.029-2.682-0.103-0.253-0.446-1.27.098-2.65 0 0 .84-.269 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.295 2.747-1.026 2.747-1.026.546 1.38.202 2.398.099 2.651.64.698 1.028 1.591 1.028 2.682 0 3.848-2.339 4.7-4.567 4.946.357.307.676.915.676 1.849 0 1.336-0.012 2.414-0.012 2.748 0 .26.208.557.688.463C21.139 20.297 24 16.549 24 12.017 24 6.484 19.523 2 14 2h-2z" clip-rule="evenodd" />
-                    </svg>
-                </a>
+        <!-- Section: Projects (Various Levels) -->
+        <section id="projects" class="py-16 md:py-24 relative bg-mario-sky text-white mt-8 md:mt-16">
+            <h2 class="text-5xl md:text-6xl font-bold text-center mb-12 text-mario-gold pixel-shadow">MY ADVENTURES</h2>
+            <div class="container mx-auto px-4 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <!-- Project Card 1 (Goomba's Block House) -->
+                <div class="project-card bg-mario-brown p-6 rounded-lg border-4 border-mario-gold shadow-xl relative overflow-hidden group hover:scale-105 transition-transform duration-300">
+                    <img src="https://placehold.co/300x200/5a2d00/ffffff?text=Project+1" alt="Project 1 Thumbnail" class="w-full h-48 object-cover mb-4 rounded mario-block border-2 border-mario-brown">
+                    <h3 class="text-2xl font-bold mb-2 text-mario-gold pixel-shadow">Project Title One</h3>
+                    <p class="text-white mb-4 text-sm">A brief description of Project One and what it achieved. Solved a "Goomba" sized problem!</p>
+                    <div class="flex justify-between items-center">
+                        <a href="https://example.com/project1" target="_blank" class="bg-mario-red text-white py-2 px-4 rounded font-bold hover:bg-mario-gold hover:text-black transition-colors pixel-shadow shadow-md border-2 border-red-800">VIEW PROJECT</a>
+                        <img src="https://placehold.co/32x32/ffd700/000000?text=C" alt="Coin" class="coin-icon w-8 h-8 animate-coin-spin cursor-pointer" data-sound="coin">
+                    </div>
+                    <!-- Optional: "Level Clear" flag on hover -->
+                    <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <img src="https://placehold.co/100x100/ffffff/000000?text=FLAG" alt="Flag Clear" class="w-24 h-auto mario-block animate-[bounceUp_0.5s_ease-out_1]" style="animation-delay: 0.2s;">
+                    </div>
+                </div>
+
+                <!-- Project Card 2 (Koopa's Keep) -->
+                <div class="project-card bg-mario-brown p-6 rounded-lg border-4 border-mario-gold shadow-xl relative overflow-hidden group hover:scale-105 transition-transform duration-300">
+                    <img src="https://placehold.co/300x200/5a2d00/ffffff?text=Project+2" alt="Project 2 Thumbnail" class="w-full h-48 object-cover mb-4 rounded mario-block border-2 border-mario-brown">
+                    <h3 class="text-2xl font-bold mb-2 text-mario-gold pixel-shadow">Project Title Two</h3>
+                    <p class="text-white mb-4 text-sm">Description for Project Two. Took on a "Koopa Troopa" and won!</p>
+                    <div class="flex justify-between items-center">
+                        <a href="https://example.com/project2" target="_blank" class="bg-mario-red text-white py-2 px-4 rounded font-bold hover:bg-mario-gold hover:text-black transition-colors pixel-shadow shadow-md border-2 border-red-800">VIEW PROJECT</a>
+                        <img src="https://placehold.co/32x32/ffd700/000000?text=C" alt="Coin" class="coin-icon w-8 h-8 animate-coin-spin cursor-pointer" data-sound="coin">
+                    </div>
+                    <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <img src="https://placehold.co/100x100/ffffff/000000?text=FLAG" alt="Flag Clear" class="w-24 h-auto mario-block animate-[bounceUp_0.5s_ease-out_1]" style="animation-delay: 0.2s;">
+                    </div>
+                </div>
+
+                <!-- Project Card 3 (Bowser's Castle - your magnum opus) -->
+                <div class="project-card bg-mario-brown p-6 rounded-lg border-4 border-mario-gold shadow-xl relative overflow-hidden group hover:scale-105 transition-transform duration-300">
+                    <img src="https://placehold.co/300x200/5a2d00/ffffff?text=Project+3" alt="Project 3 Thumbnail" class="w-full h-48 object-cover mb-4 rounded mario-block border-2 border-mario-brown">
+                    <h3 class="text-2xl font-bold mb-2 text-mario-gold pixel-shadow">Project Title Three (Big One!)</h3>
+                    <p class="text-white mb-4 text-sm">Your most challenging project, like facing Bowser himself. Detail the epic struggle and triumph!</p>
+                    <div class="flex justify-between items-center">
+                        <a href="https://example.com/project3" target="_blank" class="bg-mario-red text-white py-2 px-4 rounded font-bold hover:bg-mario-gold hover:text-black transition-colors pixel-shadow shadow-md border-2 border-red-800">VIEW PROJECT</a>
+                        <img src="https://placehold.co/32x32/ffd700/000000?text=C" alt="Coin" class="coin-icon w-8 h-8 animate-coin-spin cursor-pointer" data-sound="coin">
+                    </div>
+                    <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <img src="https://placehold.co/100x100/ffffff/000000?text=FLAG" alt="Flag Clear" class="w-24 h-auto mario-block animate-[bounceUp_0.5s_ease-out_1]" style="animation-delay: 0.2s;">
+                    </div>
+                </div>
+
             </div>
-        </footer>
-    </div>
+            <!-- Ground base -->
+            <div class="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-green-700 to-green-500 border-t-8 border-green-800"></div>
+        </section>
+
+        <!-- Section: Contact (Warp Zone) -->
+        <section id="contact" class="py-16 md:py-24 relative bg-gray-800 text-white mt-8 md:mt-16 border-t-8 border-b-8 border-gray-900">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-5xl md:text-6xl font-bold mb-12 text-mario-gold pixel-shadow">WARP TO ME!</h2>
+                <p class="text-lg mb-8 pixel-shadow">Ready to team up for your next adventure? Send me a message!</p>
+
+                <form class="max-w-md mx-auto bg-black bg-opacity-60 p-8 rounded-lg border-4 border-white shadow-xl">
+                    <div class="mb-6">
+                        <label for="name" class="block text-mario-gold text-sm md:text-base font-bold mb-2 pixel-shadow text-left">Name:</label>
+                        <input type="text" id="name" name="name" class="shadow appearance-none border-4 border-mario-brown rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-4 focus:ring-mario-gold bg-gray-200" placeholder="Your Name">
+                    </div>
+                    <div class="mb-6">
+                        <label for="email" class="block text-mario-gold text-sm md:text-base font-bold mb-2 pixel-shadow text-left">Email:</label>
+                        <input type="email" id="email" name="email" class="shadow appearance-none border-4 border-mario-brown rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-4 focus:ring-mario-gold bg-gray-200" placeholder="your@email.com">
+                    </div>
+                    <div class="mb-6">
+                        <label for="message" class="block text-mario-gold text-sm md:text-base font-bold mb-2 pixel-shadow text-left">Message:</label>
+                        <textarea id="message" name="message" rows="6" class="shadow appearance-none border-4 border-mario-brown rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-4 focus:ring-mario-gold bg-gray-200" placeholder="Let's build something awesome!"></textarea>
+                    </div>
+                    <button type="submit" class="bg-mario-green hover:bg-mario-gold hover:text-black text-white font-bold py-3 px-6 rounded-full text-lg transition-colors pixel-shadow shadow-md border-2 border-green-800 hover:scale-105 transform">SEND MESSAGE</button>
+                </form>
+
+                <div class="mt-12">
+                    <p class="text-xl md:text-2xl font-bold mb-4 pixel-shadow">Or find me on:</p>
+                    <div class="flex justify-center space-x-6">
+                        <a href="https://github.com/yourusername" target="_blank" class="text-white hover:text-mario-gold transition-colors text-4xl md:text-5xl hover:scale-110 transform" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/zenith-rai-a56185323/" target="_blank" class="text-white hover:text-mario-gold transition-colors text-4xl md:text-5xl hover:scale-110 transform" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <!-- Add more social links as needed -->
+                        <a href="https://twitter.com/yourusername" target="_blank" class="text-white hover:text-mario-gold transition-colors text-4xl md:text-5xl hover:scale-110 transform" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+             <!-- Ground base -->
+            <div class="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-gray-500 to-gray-300 border-t-8 border-gray-600"></div>
+        </section>
+
+    </main>
+
+    <!-- Footer (Castle Exit / Game Over Screen) -->
+    <footer class="bg-black text-white py-8 text-center border-t-8 border-gray-900">
+        <p class="text-lg mb-2 pixel-shadow">&copy; 2025 Zenith Rai. All rights reserved.</p>
+        <p class="text-sm pixel-shadow">Inspired by the Mushroom Kingdom.</p>
+        <img src="https://placehold.co/60x80/000000/ffffff?text=CASTLE+FLAG" alt="Castle Flag" class="mx-auto mt-4 w-16 h-auto mario-block animate-bounce-up" style="animation-delay: 0.5s;">
+    </footer>
+
+    <!-- Font Awesome for social icons. Replace 'YOUR_FONT_AWESOME_KIT_ID' with your actual kit ID -->
+    <script src="https://kit.fontawesome.com/YOUR_FONT_AWESOME_KIT_ID.js" crossorigin="anonymous"></script>
 
     <script>
-        // JavaScript for mobile menu toggle and YouTube API
-        document.addEventListener('DOMContentLoaded', () => {
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const contactForm = document.getElementById('contact-form');
-            const formMessage = document.getElementById('form-message');
+        // --- Sound Effects ---
+        // IMPORTANT: Replace these paths with your actual sound files.
+        // You can find free 8-bit sound effects online (e.g., OpenGameArt.org)
+        const sounds = {
+            coin: new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'), // Placeholder, replace with coin sound
+            powerup: new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3'), // Placeholder, replace with powerup sound
+            jump: new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3'), // Placeholder, replace with jump sound
+            pipe: new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3'), // Placeholder, replace with pipe sound
+            blockHit: new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3'), // Placeholder, replace with block hit sound
+            levelClear: new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3') // Placeholder, replace with level clear sound
+        };
 
-            // Toggle mobile menu visibility
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
+        function playSound(name) {
+            if (sounds[name]) {
+                sounds[name].currentTime = 0; // Rewind to start for quick successive plays
+                sounds[name].volume = 0.5; // Adjust volume if too loud
+                sounds[name].play().catch(e => console.warn("Sound play prevented:", e)); // Handle potential autoplay policy
+            }
+        }
 
-            // Smooth scrolling for navigation links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                    // Hide mobile menu after clicking a link
-                    if (!mobileMenu.classList.contains('hidden')) {
-                        mobileMenu.classList.add('hidden');
-                    }
-                });
-            });
+        // --- Background Music Toggle ---
+        const bgMusic = document.getElementById('bgMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        let isMusicPlaying = false;
 
-            // Handle contact form submission
-            contactForm.addEventListener('submit', function(e) {
-                e.preventDefault(); // Prevent default form submission
-
-                const name = this.elements.name.value;
-                const email = this.elements.email.value;
-                const message = this.elements.message.value;
-                const recipientEmail = 'zenithhot123@gmail.com'; // Your email address
-
-                // Encode the subject and body for the mailto link
-                const subject = encodeURIComponent(`Message from your portfolio by ${name}`);
-                const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
-
-                // Construct the mailto URL
-                const mailtoLink = `mailto:${recipientEmail}?subject=${subject}&body=${body}`;
-
-                // Attempt to open the user's email client
-                window.open(mailtoLink, '_blank');
-
-                // Display a message to the user
-                formMessage.textContent = 'Attempting to open your email client. Please send the email from there.';
-                formMessage.classList.remove('hidden');
-                formMessage.classList.add('bg-blue-600', 'p-3', 'rounded-lg'); // Style the message
-
-                // Optionally clear the form after a short delay
-                setTimeout(() => {
-                    contactForm.reset();
-                    formMessage.classList.add('hidden');
-                    formMessage.classList.remove('bg-blue-600', 'p-3', 'rounded-lg');
-                }, 5000); // Hide message after 5 seconds
-            });
-
+        musicToggle.addEventListener('click', () => {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                musicToggle.textContent = '🔇'; // Muted icon
+            } else {
+                bgMusic.volume = 0.3; // Set background music volume lower
+                bgMusic.play().then(() => {
+                    isMusicPlaying = true;
+                    musicToggle.textContent = '🎵'; // Playing icon
+                }).catch(e => console.warn("Background music autoplay prevented, user interaction needed:", e));
+            }
+            isMusicPlaying = !isMusicPlaying;
         });
+
+        // Attempt to autoplay music on first user interaction with the document
+        // This is a common workaround for browser autoplay policies
+        document.addEventListener('DOMContentLoaded', () => {
+            const attemptPlayMusicOnFirstClick = () => {
+                if (!isMusicPlaying) {
+                    bgMusic.volume = 0.3; // Lower volume slightly
+                    bgMusic.play().then(() => {
+                        isMusicPlaying = true;
+                        musicToggle.textContent = '🎵';
+                    }).catch(e => console.warn("Music auto-play failed, user interaction still needed for background music:", e));
+                }
+                // Remove this listener once an interaction happens, to avoid multiple attempts
+                document.removeEventListener('click', attemptPlayMusicOnFirstClick);
+            };
+            // Listen for any click on the document to trigger music attempt
+            document.addEventListener('click', attemptPlayMusicOnFirstClick);
+        });
+
+
+        // --- Navigation Item Sound Effects ---
+        document.querySelectorAll('.mario-nav-item, .coin-icon').forEach(item => {
+            item.addEventListener('click', function(event) {
+                // Determine which sound to play based on data-sound attribute or default to 'coin'
+                const soundToPlay = this.dataset.sound || 'coin'; 
+                playSound(soundToPlay);
+            });
+        });
+
+
+        // --- Question Block Interaction ---
+        document.querySelectorAll('.question-block').forEach(block => {
+            block.addEventListener('click', function() {
+                playSound('blockHit');
+                
+                // Add a temporary class for a quick bounce animation
+                this.classList.remove('animate-question-bounce'); // Stop continuous
+                this.classList.add('animate-[bounceUp_0.2s_ease-out_1]'); // Quick single bounce
+                setTimeout(() => {
+                    this.classList.remove('animate-[bounceUp_0.2s_ease-out_1]');
+                    this.classList.add('animate-question-bounce'); // Resume continuous
+                }, 200);
+
+                // Scroll to target section
+                const targetId = this.dataset.target;
+                if (targetId) {
+                    document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // --- Pipe Warp Navigation ---
+        document.querySelectorAll('.pipe').forEach(pipe => {
+            pipe.addEventListener('click', function() {
+                playSound('pipe');
+
+                // Animate character going down pipe (visual effect)
+                const marioChar = document.getElementById('marioChar');
+                if (marioChar) {
+                    marioChar.style.transition = 'transform 0.5s ease-in';
+                    marioChar.style.transform = 'translateY(200px) scale(0.1)'; // Shrink and move down
+                    
+                    // After animation, reset char and scroll
+                    setTimeout(() => { 
+                        marioChar.style.transition = ''; // Remove transition for immediate reset
+                        marioChar.style.transform = ''; // Reset position and scale
+                        // Re-add bounce animation if it was removed
+                        marioChar.classList.add('animate-bounce-up'); 
+                        
+                        // Scroll to target section after character "disappears"
+                        const targetId = this.dataset.target;
+                        if (targetId) {
+                            document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }, 500); // Match this timeout to the CSS transition duration
+                } else {
+                    // If no character, just scroll directly
+                    const targetId = this.dataset.target;
+                    if (targetId) {
+                        document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+
+        // --- Project Card Hover (Optional "Level Clear" sound) ---
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                // Play subtle sound like "level complete" fanfare or a happy chime
+                // playSound('levelClear'); // Be mindful of overuse for hover effects
+            });
+        });
+
+        // --- Form Submission (Example, integrate with a backend service like Formspree for real use) ---
+        const contactForm = document.querySelector('#contact form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault(); // Prevent default form submission behavior
+
+                // In a real application, you would send this data to a backend or a service like Formspree.
+                // Example using fetch for a hypothetical API endpoint:
+                /*
+                const formData = new FormData(this);
+                fetch('/your-api-endpoint', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                    // Display success message
+                    alert('Message sent successfully!');
+                    this.reset(); // Clear the form
+                    playSound('powerup');
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    // Display error message
+                    alert('Failed to send message. Please try again later.');
+                });
+                */
+
+                console.log('Form submission simulated!');
+                // For demonstration, simply show a message and play sound
+                alert('Thank you for your message! Your quest is complete!');
+                this.reset(); // Clear the form fields
+                playSound('powerup'); // Play a triumphant sound
+            });
+        }
+
+        // --- Character Jump on click ---
+        const marioChar = document.getElementById('marioChar');
+        if (marioChar) {
+            marioChar.addEventListener('click', () => {
+                playSound('jump');
+                // Remove continuous animation, add a single jump animation
+                marioChar.classList.remove('animate-bounce-up'); 
+                marioChar.classList.add('animate-[bounceUp_0.4s_ease-out_1]'); 
+                
+                // After the single jump, resume continuous bounce
+                setTimeout(() => {
+                    marioChar.classList.remove('animate-[bounceUp_0.4s_ease-out_1]');
+                    marioChar.classList.add('animate-bounce-up'); 
+                }, 400); // Duration matches the jump animation
+            });
+        }
     </script>
 </body>
 </html>
